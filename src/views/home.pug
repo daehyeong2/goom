@@ -9,7 +9,8 @@ html(lang="en")
         header
             h1 Goom
         main
-            h2 Welcome to Goom 
-            p This is a simple web app that uses WebRTC to create a video chat room.
-            button#start Start Video Chat
+            ul#messages
+            form
+                input(type="text", placeholder="write a message", required, name="message")
+                button Send
         script(src="/public/js/app.js")

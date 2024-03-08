@@ -35,13 +35,22 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
 
+const sockets = [];
+
 wss.on("connection", (socket) => {
+  sockets.push(socket);
   console.log("✅ Connected to Browser");
-  socket.on("close", () => console.log("❌ Disconnected from Browser"));
-  socket.on("message", (message) => {
-    console.log("📬 Got a message from the Browser:", message.toString());
+  socket.on("close", () => {
+    sockets.splice(sockets.indexOf(socket), 1);
+    console.log("❌ Disconnected from Browser");
   });
-  socket.send("Hello!");
+  socket.on("message", (message) => {
+    sockets.forEach((aSocket) => {
+      if (aSocket !== socket) {
+        aSocket.send(message.toString());
+      }
+    });
+  });
 });
 
 server.listen(PORT, handleListening);
