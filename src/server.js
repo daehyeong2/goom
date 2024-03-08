@@ -21,15 +21,20 @@ app.use(livereloadMiddleware());
 app.use(morgan("dev"));
 
 app.get("/", (_, res) => res.render("home"));
-app.get("/*", (_, res) => res.redirect("/"));
 
 const handleListening = () =>
   console.log(`✅ Server listening on port http://localhost:${PORT} 🚀`);
 
 app.use("/public", express.static(__dirname + "/public"));
 
+app.get("/*", (req, res) => {
+  res.redirect("/");
+});
+
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
+
+wss.on("connection", (socket) => {});
 
 server.listen(PORT, handleListening);
