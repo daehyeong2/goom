@@ -38,16 +38,25 @@ const sockets = [];
 wss.on("connection", (socket) => {
   sockets.push(socket);
   console.log("✅ Connected to Browser");
+  socket["nickname"] = "익명";
   socket.on("close", () => {
     sockets.splice(sockets.indexOf(socket), 1);
     console.log("❌ Disconnected from Browser");
   });
   socket.on("message", (message) => {
-    sockets.forEach((aSocket) => {
-      if (aSocket !== socket) {
-        aSocket.send(message.toString());
-      }
-    });
+    const parsedMessage = JSON.parse(message);
+    switch (parsedMessage.type) {
+      case "new_message":
+        sockets.forEach((aSocket) => {
+          if (aSocket !== socket) {
+            aSocket.send(`${socket.nickname}: ${parsedMessage.payload}`);
+          }
+        });
+        break;
+      case "nickname":
+        socket["nickname"] = parsedMessage.payload;
+        break;
+    }
   });
 });
 
