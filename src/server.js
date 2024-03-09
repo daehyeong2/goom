@@ -1,5 +1,5 @@
 import http from "http";
-import WebSocket from "ws";
+import SocketIO from "socket.io";
 import express from "express";
 import livereloadMiddleware from "connect-livereload";
 import livereload from "livereload";
@@ -30,34 +30,39 @@ app.get("/*", (req, res) => {
 });
 
 const server = http.createServer(app);
+const io = SocketIO(server);
 
-const wss = new WebSocket.Server({ server });
-
-const sockets = [];
-
-wss.on("connection", (socket) => {
-  sockets.push(socket);
-  console.log("✅ Connected to Browser");
-  socket["nickname"] = "익명";
-  socket.on("close", () => {
-    sockets.splice(sockets.indexOf(socket), 1);
-    console.log("❌ Disconnected from Browser");
-  });
-  socket.on("message", (message) => {
-    const parsedMessage = JSON.parse(message);
-    switch (parsedMessage.type) {
-      case "new_message":
-        sockets.forEach((aSocket) => {
-          if (aSocket !== socket) {
-            aSocket.send(`${socket.nickname}: ${parsedMessage.payload}`);
-          }
-        });
-        break;
-      case "nickname":
-        socket["nickname"] = parsedMessage.payload;
-        break;
-    }
-  });
+io.on("connection", (socket) => {
+  console.log(socket);
 });
+
+// const wss = new WebSocket.Server({ server });
+
+// const sockets = [];
+
+// wss.on("connection", (socket) => {
+//   sockets.push(socket);
+//   console.log("✅ Connected to Browser");
+//   socket["nickname"] = "익명";
+//   socket.on("close", () => {
+//     sockets.splice(sockets.indexOf(socket), 1);
+//     console.log("❌ Disconnected from Browser");
+//   });
+//   socket.on("message", (message) => {
+//     const parsedMessage = JSON.parse(message);
+//     switch (parsedMessage.type) {
+//       case "new_message":
+//         sockets.forEach((aSocket) => {
+//           if (aSocket !== socket) {
+//             aSocket.send(`${socket.nickname}: ${parsedMessage.payload}`);
+//           }
+//         });
+//         break;
+//       case "nickname":
+//         socket["nickname"] = parsedMessage.payload;
+//         break;
+//     }
+//   });
+// });
 
 server.listen(PORT, handleListening);
