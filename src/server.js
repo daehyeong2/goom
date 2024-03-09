@@ -1,7 +1,6 @@
 import http from "http";
 import WebSocket from "ws";
 import express from "express";
-import morgan from "morgan";
 import livereloadMiddleware from "connect-livereload";
 import livereload from "livereload";
 
@@ -18,7 +17,6 @@ const PORT = 3000;
 app.set("view engine", "pug");
 app.set("views", __dirname + "/views");
 app.use(livereloadMiddleware());
-app.use(morgan("dev"));
 
 app.get("/", (_, res) => res.render("home"));
 
