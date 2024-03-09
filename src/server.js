@@ -33,7 +33,10 @@ const server = http.createServer(app);
 const io = SocketIO(server);
 
 io.on("connection", (socket) => {
-  console.log(socket);
+  socket.on("enter_room", (roomName, done) => {
+    console.log(roomName);
+    done();
+  });
 });
 
 // const wss = new WebSocket.Server({ server });

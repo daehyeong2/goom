@@ -9,6 +9,9 @@ html(lang="en")
         header
             h1 Goom
         main
-            
+            #welcome 
+                form
+                    input(type="text", placeholder="room name", required, name="roomName")
+                    button Enter Room
         script(src="/socket.io/socket.io.js")
         script(src="/public/js/app.js")
