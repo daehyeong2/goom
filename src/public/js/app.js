@@ -4,10 +4,16 @@ const welcome = document.getElementById("welcome");
 const form = document.querySelector("form");
 const room = document.getElementById("room");
 const message = document.getElementById("message");
+const roomList = document.getElementById("rooms");
 
 room.hidden = true;
 
 let roomName;
+
+function paintTitle(newCount) {
+  const h3 = room.querySelector("h3");
+  h3.innerText = `"${roomName}" Room (${newCount})`;
+}
 
 function addMessage(message) {
   const ul = room.querySelector("ul");
@@ -26,11 +32,10 @@ function handleMessageSubmit(event) {
   input.value = "";
 }
 
-function showRoom() {
+function showRoom(newCount) {
   welcome.hidden = true;
   room.hidden = false;
-  const h3 = room.querySelector("h3");
-  h3.innerText = `"${roomName}" Room`;
+  paintTitle(newCount);
   message.addEventListener("submit", handleMessageSubmit);
 }
 
@@ -48,8 +53,23 @@ function handleRoomSubmit(event) {
 
 form.addEventListener("submit", handleRoomSubmit);
 
-socket.on("join", addMessage);
+socket.on("join", (user, newCount) => {
+  addMessage(`${user} joined!`);
+  paintTitle(newCount);
+});
 
-socket.on("leave", addMessage);
+socket.on("leave", (user, newCount) => {
+  addMessage(`${user} left.`);
+  paintTitle(newCount);
+});
 
 socket.on("new_message", addMessage);
+
+socket.on("room_change", (rooms) => {
+  roomList.innerHTML = "";
+  rooms.forEach((roomName) => {
+    const li = document.createElement("li");
+    li.innerText = roomName;
+    roomList.append(li);
+  });
+});

@@ -1,8 +1,9 @@
 import http from "http";
-import SocketIO from "socket.io";
+import { Server } from "socket.io";
 import express from "express";
 import livereloadMiddleware from "connect-livereload";
 import livereload from "livereload";
+import { instrument } from "@socket.io/admin-ui";
 
 const liveServer = livereload.createServer({
   exts: ["js", "pug", "css"],
@@ -30,18 +31,47 @@ app.get("/*", (req, res) => {
 });
 
 const server = http.createServer(app);
-const io = SocketIO(server);
+const io = new Server(server, {
+  cors: {
+    origin: ["https://admin.socket.io"],
+    credentials: true,
+  },
+});
+
+instrument(io, {
+  auth: false,
+});
+
+function getPublicRooms() {
+  const { sids, rooms } = io.sockets.adapter;
+  const publicRooms = [];
+  rooms.forEach((_, key) => {
+    if (!sids.get(key)) {
+      publicRooms.push(key);
+    }
+  });
+  return publicRooms;
+}
+
+function countRoom(roomName) {
+  return io.sockets.adapter.rooms.get(roomName).size;
+}
 
 io.on("connection", (socket) => {
   socket.on("enter_room", (roomName, done) => {
     socket.join(roomName);
-    done();
-    socket.to(roomName).emit("join", `${socket["nickname"]} joined!`);
+    const newCount = countRoom(roomName);
+    done(newCount);
+    socket.to(roomName).emit("join", socket["nickname"], newCount);
+    io.sockets.emit("room_change", getPublicRooms());
   });
   socket.on("disconnecting", () => {
     socket.rooms.forEach((room) =>
-      socket.to(room).emit("leave", `${socket["nickname"]} left!`)
+      socket.to(room).emit("leave", socket["nickname"], countRoom(room) - 1)
     );
+  });
+  socket.on("disconnect", () => {
+    io.sockets.emit("room_change", getPublicRooms());
   });
   socket.on("new_message", (msg, room, done) => {
     socket.to(room).emit("new_message", `${socket["nickname"]}: ${msg}`);
