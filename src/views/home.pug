@@ -11,7 +11,9 @@ html(lang="en")
         main 
             #myStream 
                 video#myVideo(autoplay, playsinline, width="400", height="400")
-                button#mute Mute
-                button#camera Turn Camera Off
+                button#mute 마이크 끄기
+                button#camera 카메라 끄기
+            h3 카메라 선택
+            select#cameras
         script(src="/socket.io/socket.io.js")
         script(src="/public/js/app.js")
