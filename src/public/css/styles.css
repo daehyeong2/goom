@@ -1,0 +1,180 @@
+@import url("./reset.css");
+
+body {
+  display: grid;
+  grid-template-rows: 1fr 8fr;
+  height: 100vh;
+  box-sizing: border-box;
+}
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header h1 {
+  font-size: 70px;
+  font-weight: bold;
+}
+#welcome {
+  margin-top: 200px;
+  justify-content: center;
+  align-items: center;
+}
+#welcome form {
+  width: 400px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
+}
+#welcome form input {
+  width: 250px;
+  height: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  padding: 10px;
+  font-size: 24px;
+  text-align: center;
+  outline: none;
+}
+#welcome form button {
+  width: 150px;
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  background-color: #0984e3;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  outline: none;
+}
+#call {
+  margin-top: 50px;
+  flex-direction: column;
+  align-items: center;
+}
+#videos {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+}
+#myStream {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+#myVideo {
+  width: 500px;
+  height: 350px;
+  object-fit: cover;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+#peerFace {
+  width: 500px;
+  height: 350px;
+  object-fit: cover;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+}
+#settings {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+#buttons {
+  display: flex;
+  gap: 10px;
+}
+#buttons button {
+  width: 50px;
+  height: 50px;
+  background-color: #0984e3;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.1s ease-in-out;
+  color: white;
+  font-size: 25px;
+}
+#buttons button:hover {
+  background-color: #00a8ff;
+}
+#setCamera {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+#setCamera select {
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+  font-size: 15px;
+  outline: none;
+}
+#chat {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 210px;
+  align-items: center;
+}
+#messages {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: auto;
+}
+#messages .me {
+  align-self: flex-end;
+  background-color: #0984e3;
+  color: white;
+  border-radius: 10px;
+  padding: 5px;
+}
+#messages .peer {
+  align-self: flex-start;
+  background-color: #dfe6e9;
+  border-radius: 10px;
+  padding: 5px;
+}
+#chat form {
+  display: flex;
+  gap: 10px;
+}
+#chat input {
+  width: 100%;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+  padding-left: 10px;
+  font-size: 15px;
+  outline: 1px solid rgba(0, 0, 0, 0.25);
+}
+#chat input:focus-within {
+  outline: 1px solid #0984e3;
+}
+#chat button {
+  width: 50px;
+  height: 30px;
+  border: none;
+  border-radius: 10px;
+  background-color: #0984e3;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  outline: none;
+}
